@@ -1,12 +1,11 @@
-// src/app/page.js
-import Game from './components/Game.js'; // Asegúrate de que esta ruta sea correcta
+import Juego from './components/Juego.js'; // Asegúrate de que esta ruta sea correcta
 
-const Home = () => {
+const Inicio = () => {
   return (
     <div>
-      <Game />
+      <Juego />
     </div>
   );
 };
 
-export default Home;
+export default Inicio;
