@@ -50,8 +50,8 @@ const Juego = () => {
       if (letrasActualizadas.join('') === paisSeleccionado.name) {
         setMensaje('¡Correcto! Pasando al siguiente país...');
         setPuntos(puntos + 10);
-        setPaisesCorrectos([...paisesCorrectos, paisSeleccionado.flag]); // Añade la bandera a la lista de correctos
-        setTimeout(() => seleccionarPaisAleatorio(paises), 2000); // Retardo antes de pasar al siguiente país
+        setPaisesCorrectos([...paisesCorrectos, paisSeleccionado.flag]); 
+        setTimeout(() => seleccionarPaisAleatorio(paises), 2000); 
       }
     } else {
       setMensaje('Letra incorrecta, ¡intenta de nuevo!');
@@ -60,8 +60,8 @@ const Juego = () => {
 
   const saltarPais = () => {
     setMensaje('¡País saltado!');
-    setPuntos(puntos > 0 ? puntos - 5 : 0); // Resta 5 puntos, pero no permite que los puntos sean negativos.
-    setPaisesIncorrectos([...paisesIncorrectos, paisSeleccionado.flag]); // Añade la bandera a la lista de incorrectos
+    setPuntos(puntos > 0 ? puntos - 5 : 0); 
+    setPaisesIncorrectos([...paisesIncorrectos, paisSeleccionado.flag]); 
     setTimeout(() => seleccionarPaisAleatorio(paises), 1000);
   };
 
