@@ -9,6 +9,8 @@ const Juego = () => {
   const [puntos, setPuntos] = useState(0);
   const [letrasAdivinadas, setLetrasAdivinadas] = useState([]);
   const [mensaje, setMensaje] = useState('');
+  const [paisesCorrectos, setPaisesCorrectos] = useState([]);
+  const [paisesIncorrectos, setPaisesIncorrectos] = useState([]);
 
   useEffect(() => {
     const obtenerPaises = async () => {
@@ -48,6 +50,7 @@ const Juego = () => {
       if (letrasActualizadas.join('') === paisSeleccionado.name) {
         setMensaje('¡Correcto! Pasando al siguiente país...');
         setPuntos(puntos + 10);
+        setPaisesCorrectos([...paisesCorrectos, paisSeleccionado.flag]); // Añade la bandera a la lista de correctos
         setTimeout(() => seleccionarPaisAleatorio(paises), 2000); // Retardo antes de pasar al siguiente país
       }
     } else {
@@ -57,6 +60,8 @@ const Juego = () => {
 
   const saltarPais = () => {
     setMensaje('¡País saltado!');
+    setPuntos(puntos > 0 ? puntos - 5 : 0); // Resta 5 puntos, pero no permite que los puntos sean negativos.
+    setPaisesIncorrectos([...paisesIncorrectos, paisSeleccionado.flag]); // Añade la bandera a la lista de incorrectos
     setTimeout(() => seleccionarPaisAleatorio(paises), 1000);
   };
 
@@ -68,12 +73,34 @@ const Juego = () => {
     ));
   };
 
+  const renderizarBanderasCorrectas = () => {
+    return (
+      <div style={{ position: 'absolute', top: '10px', left: '10px', display: 'flex', gap: '10px', flexDirection: 'column' }}>
+        {paisesCorrectos.map((bandera, indice) => (
+          <img key={indice} src={bandera} alt={`Bandera del país ${indice + 1}`} style={{ width: '50px' }} />
+        ))}
+      </div>
+    );
+  };
+
+  const renderizarBanderasIncorrectas = () => {
+    return (
+      <div style={{ position: 'absolute', top: '10px', right: '10px', display: 'flex', gap: '10px', flexDirection: 'column' }}>
+        {paisesIncorrectos.map((bandera, indice) => (
+          <img key={indice} src={bandera} alt={`Bandera incorrecta del país ${indice + 1}`} style={{ width: '50px', filter: 'grayscale(100%)' }} />
+        ))}
+      </div>
+    );
+  };
+
   return (
-    <div>
-      <h1>Adivina el País</h1>
+    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif', backgroundColor: '#f4f4f4', minHeight: '100vh', position: 'relative' }}>
+      <h1 style={{ textAlign: 'center', color: '#333' }}>Adivina el País</h1>
+      {renderizarBanderasCorrectas()} {/* Renderiza las banderas correctas en la parte superior izquierda */}
+      {renderizarBanderasIncorrectas()} {/* Renderiza las banderas incorrectas en la parte superior derecha */}
       {paisSeleccionado && (
-        <div>
-          <img src={paisSeleccionado.flag} alt="Bandera del país" style={{ width: '300px' }} />
+        <div style={{ textAlign: 'center', margin: '20px 0' }}>
+          <img src={paisSeleccionado.flag} alt="Bandera del país" style={{ width: '300px', border: '1px solid #ddd', borderRadius: '10px' }} />
           <div style={{ margin: '20px 0' }}>
             {renderizarNombrePais()}
           </div>
@@ -82,16 +109,17 @@ const Juego = () => {
             maxLength="1"
             onChange={manejarAdivinanza}
             placeholder="Ingresa una letra"
+            style={{ padding: '10px', fontSize: '18px', borderRadius: '5px', border: '1px solid #ddd', width: '50%' }}
           />
           <div style={{ margin: '20px 0' }}>
-            <button onClick={saltarPais} style={{ padding: '10px 20px', fontSize: '16px' }}>
+            <button onClick={saltarPais} style={{ padding: '10px 20px', fontSize: '16px', borderRadius: '5px', backgroundColor: '#007bff', color: '#fff', border: 'none', cursor: 'pointer' }}>
               Saltar País
             </button>
           </div>
         </div>
       )}
-      <p>Puntos: {puntos}</p>
-      <p>{mensaje}</p>
+      <p style={{ textAlign: 'center', fontSize: '18px', color: '#333' }}>Puntos: {puntos}</p>
+      <p style={{ textAlign: 'center', fontSize: '18px', color: '#d9534f' }}>{mensaje}</p>
     </div>
   );
 };
